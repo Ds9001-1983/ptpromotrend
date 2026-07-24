@@ -1,0 +1,13 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errors = [];
+p.on("console", (m) => m.type() === "error" && errors.push(m.text()));
+p.on("pageerror", (e) => errors.push("PAGEERROR: " + e.stack?.split("\n").slice(0, 4).join(" | ")));
+const res = await p.goto(process.argv[2], { waitUntil: "networkidle", timeout: 45000 }).catch((e) => null);
+console.log("HTTP:", res?.status());
+await p.waitForTimeout(3000);
+console.log("--- Konsole-Fehler:");
+console.log(errors.slice(0, 10).join("\n---\n") || "(keine)");
+await p.screenshot({ path: "/tmp/remote.png" });
+await b.close();

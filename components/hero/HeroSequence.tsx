@@ -248,13 +248,24 @@ function Preloader({ progress, done }: { progress: number; done: boolean }) {
   const [skipped, setSkipped] = useState(false);
 
   useEffect(() => {
-    // Nur beim ersten Besuch der Session zeigen
-    if (sessionStorage.getItem("pt-preloaded")) {
+    // Nur beim ersten Besuch der Session zeigen. sessionStorage kann bei
+    // blockierten Cookies eine SecurityError werfen → immer abfangen.
+    let seen = false;
+    try {
+      seen = !!sessionStorage.getItem("pt-preloaded");
+    } catch {
+      /* Storage blockiert → Preloader einfach normal zeigen */
+    }
+    if (seen) {
       setSkipped(true);
       return;
     }
     if (done) {
-      sessionStorage.setItem("pt-preloaded", "1");
+      try {
+        sessionStorage.setItem("pt-preloaded", "1");
+      } catch {
+        /* Storage blockiert → beim nächsten Load erneut zeigen, unkritisch */
+      }
       const t = window.setTimeout(() => setGone(true), 750);
       return () => window.clearTimeout(t);
     }
