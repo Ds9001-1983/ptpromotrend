@@ -1,0 +1,14 @@
+# Roh-Assets (Imagefilm 136 MB > GitHub-Limit; Web-Assets liegen in public/)
+Projektordner/
+
+# Dependencies & Build
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Misc
+.DS_Store
+*.log
+.env*

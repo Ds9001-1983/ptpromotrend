@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@theme {
+  /* PROMOtrend CI — gesampelt aus dem Original-Logo */
+  --color-ink: #0e1512;
+  --color-ink-soft: #5a655f;
+  --color-ground: #fafaf7;
+  --color-paper: #ffffff;
+  --color-green: #006c54;
+  --color-green-deep: #004d3c;
+  --color-yellow: #fbba00;
+  --color-hairline: #e7eae6;
+  --color-mint: #e4f1ea;
+  --color-warm: #faf6ed;
+  --color-sand: #eadfcc;
+
+  --font-display: var(--font-switzer), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: var(--font-general-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+:root {
+  --header-h: 76px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-yellow) 45%, transparent);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Display-Typo: Switzer, eng gesetzt */
+.type-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.03;
+  text-wrap: balance;
+}
+
+.type-eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Warmer Akzent aus Richtung 02: gelber Marker unter Schlüsselwörtern */
+.marker {
+  background-image: linear-gradient(
+    transparent 68%,
+    color-mix(in srgb, var(--color-yellow) 60%, transparent) 68%,
+    color-mix(in srgb, var(--color-yellow) 60%, transparent) 94%,
+    transparent 94%
+  );
+}
+
+/* Animierter Marker: wächst von links, wenn .in gesetzt wird */
+.marker-anim {
+  background-image: linear-gradient(
+    transparent 68%,
+    color-mix(in srgb, var(--color-yellow) 60%, transparent) 68%,
+    color-mix(in srgb, var(--color-yellow) 60%, transparent) 94%,
+    transparent 94%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: background-size 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+.marker-anim.in {
+  background-size: 100% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker-anim {
+    background-size: 100% 100%;
+    transition: none;
+  }
+}
+
+/* ————— Custom-Cursor (nur pointer:fine, siehe CursorProvider) ————— */
+.has-custom-cursor,
+.has-custom-cursor a,
+.has-custom-cursor button {
+  cursor: none;
+}
+
+.cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition:
+    width 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s;
+}
+
+.has-custom-cursor .cursor-dot {
+  display: flex;
+  opacity: 0;
+}
+
+.has-custom-cursor .cursor-dot.is-visible {
+  opacity: 1;
+}
+
+.cursor-dot.is-active {
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  background: var(--color-green);
+}
+
+.cursor-label {
+  opacity: 0;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-paper);
+  white-space: nowrap;
+  transition: opacity 0.2s 0.05s;
+}
+
+.cursor-dot.is-active .cursor-label {
+  opacity: 1;
+}
+
+/* ————— Reveal (Fade-up beim Viewport-Eintritt) ————— */
+.rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rv.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
